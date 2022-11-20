@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     public float changeTime = 1.0f;
 
     private Animator animator;
+    private bool broken = true;
     private int direction = 1;
     private Rigidbody2D rigidbody2d;
     private float timer;
@@ -21,6 +22,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        if (!broken) return;
         timer -= Time.deltaTime;
 
         if (timer < 0)
@@ -32,6 +34,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!broken) return;
         var position = rigidbody2d.position;
         if (vertical)
         {
@@ -53,5 +56,12 @@ public class EnemyController : MonoBehaviour
     {
         var player = other.gameObject.GetComponent<RubyController>();
         if (player != null) player.ChangeHealth(-1);
+    }
+
+    public void Fix()
+    {
+        broken = false;
+        rigidbody2d.simulated = false;
+        animator.SetTrigger("Fixed");
     }
 }
