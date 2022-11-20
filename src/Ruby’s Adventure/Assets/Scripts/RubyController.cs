@@ -4,6 +4,7 @@ public class RubyController : MonoBehaviour
 {
     public float speed = 3.0f;
     public float timeInvincible = 2.0f; // seconds
+    public GameObject projectilePrefab;
     private Animator animator;
     private float horizontal;
     private float invincibleTimer;
@@ -29,6 +30,7 @@ public class RubyController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         var move = new Vector2(horizontal, vertical);
+        if (Input.GetKeyDown(KeyCode.C)) Launch();
 
         if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
         {
@@ -67,5 +69,16 @@ public class RubyController : MonoBehaviour
 
         Health = Mathf.Clamp(Health + amount, 0, MaxHealth);
         Debug.Log(Health + "/" + MaxHealth);
+    }
+
+    private void Launch()
+    {
+        var projectileObject =
+            Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+
+        var projectile = projectileObject.GetComponent<Projectile>();
+        projectile.Launch(lookDirection, 300);
+
+        animator.SetTrigger("Launch");
     }
 }
