@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 46161752}
   - component: {fileID: 46161751}
   - component: {fileID: 46161750}
+  - component: {fileID: 46161753}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,6 +208,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &46161753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46161749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f57b2edc22e1f4f8e664c35aefa94c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1855805355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5353819986153807193, guid: 9a841bbf836360f42a3b9bdc61787729, type: 3}
+  m_PrefabInstance: {fileID: 7359178981077252451}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &1855805360
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855805355}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: e08074e9e8bc8464282164576fb1200b, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.64, y: 0.64}
+  m_EdgeRadius: 0
 --- !u!1001 &3357633768867001304
 PrefabInstance:
   m_ObjectHideFlags: 0

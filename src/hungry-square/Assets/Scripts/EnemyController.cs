@@ -3,48 +3,37 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private Rigidbody2D _rigidbody2D;
-    private float _pushForce = 4f;
+    private Collider2D _collider2D;
+    private Vector2 _initialForce = new(4f, 4f);
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _collider2D = GetComponent<Collider2D>();
     }
 
     private void Start()
     {
-        _rigidbody2D.AddForce(_pushForce * Vector2.up, ForceMode2D.Impulse);
-        _rigidbody2D.AddForce(_pushForce * Vector2.right, ForceMode2D.Impulse);
+        _rigidbody2D.AddForce(_initialForce, ForceMode2D.Impulse);
     }
 
-    private void Update()
+    private void OnCollisionEnter2D(Collision2D col)
     {
+        // TODO: check collision with player?
     }
 
-    private void FixedUpdate()
+    private void OnCollisionExit2D(Collision2D col)
     {
-        var position = _rigidbody2D.position;
-        // if (Mathf.Abs(position.y) > 5 || Mathf.Abs(position.x) > 10) _pushForce *= 1.05f;
-        switch (position.y)
+        var velocity = _rigidbody2D.velocity;
+        var bounds = _collider2D.bounds;
+        var moveX = Mathf.Abs(Time.fixedDeltaTime * velocity.x);
+        var moveY = Mathf.Abs(Time.fixedDeltaTime * velocity.y);
+        if (moveX < bounds.extents.x && moveY < bounds.extents.y)
         {
-            case > 5:
-                Debug.Log("Reached upper border, moving down");
-                _rigidbody2D.AddForce(_pushForce * Vector2.down, ForceMode2D.Impulse);
-                return;
-            case < -5:
-                Debug.Log("Reached lower border, moving up");
-                _rigidbody2D.AddForce(_pushForce * Vector2.up, ForceMode2D.Impulse);
-                return;
-        }
-        switch (position.x)
-        {
-            case > 10:
-                Debug.Log("Reached left border, moving right");
-                _rigidbody2D.AddForce(_pushForce * Vector2.left, ForceMode2D.Impulse);
-                return;
-            case < -10:
-                Debug.Log("Reached right border, moving left");
-                _rigidbody2D.AddForce(_pushForce * Vector2.right, ForceMode2D.Impulse);
-                return;
+            var increase = velocity.magnitude * 0.1f;
+            _initialForce.x += increase;
+            _initialForce.y += increase;
+            _rigidbody2D.AddForce(velocity.normalized * increase, ForceMode2D.Impulse);
         }
     }
 }
