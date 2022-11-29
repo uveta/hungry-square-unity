@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 3.0f;
+    public GameObject foodPrefab;
+    public GameObject enemyPrefab;
     private float _horizontal;
 
     // movement
@@ -31,18 +33,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        switch (col.collider.tag)
+        if (col.collider.CompareTag("Enemy"))
         {
-            case "Enemy":
-                // collision with enemy
-                break;
-            case "MainCamera":
-                transform.position = new Vector2(-5, 0);
-                // collision with screen edge
-                break;
-            case "Food":
-                // picked up food
-                break;
+            // collision with enemy
+            // game over
+            transform.position = new Vector2(-6, 0);
+        }
+        if (col.collider.CompareTag("MainCamera"))
+        {
+            // collision with screen edge
+            // game over
+            transform.position = new Vector2(-6, 0);
+        }
+        if (col.collider.CompareTag("Food"))
+        {
+            // picked up food
+            Destroy(col.collider.gameObject);
+            // spawn enemy
+            EnemyController.SpawnEnemy(enemyPrefab);
+            // spawn food
+            GameController.SpawnFood(foodPrefab);
         }
     }
 }

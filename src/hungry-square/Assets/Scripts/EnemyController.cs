@@ -36,4 +36,13 @@ public class EnemyController : MonoBehaviour
             _rigidbody2D.AddForce(velocity.normalized * increase, ForceMode2D.Impulse);
         }
     }
+
+    public static void SpawnEnemy(GameObject enemyPrefab)
+    {
+        var camera = Camera.main;
+        var maxY = camera.orthographicSize;
+        var maxX = maxY * camera.aspect;
+        var position = new Vector2(Random.Range(-maxX, maxX), Random.Range(-maxY, maxY));
+        Instantiate(enemyPrefab, position, Quaternion.identity);
+    }
 }
