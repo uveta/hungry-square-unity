@@ -1,10 +1,9 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float speed = 3.0f;
-    public GameObject foodPrefab;
-    public GameObject enemyPrefab;
+    
     private float _horizontal;
 
     // movement
@@ -48,11 +47,14 @@ public class PlayerController : MonoBehaviour
         if (col.collider.CompareTag("Food"))
         {
             // picked up food
+            // remove food
             Destroy(col.collider.gameObject);
+            // TODO: increase score
+            // TODO: increase game speed
             // spawn enemy
-            EnemyController.SpawnEnemy(enemyPrefab);
+            Enemy.Spawn();
             // spawn food
-            GameController.SpawnFood(foodPrefab);
+            Food.Spawn();
         }
     }
 }
