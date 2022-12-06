@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    private void Awake()
+    public GameOverScreen gameOverScreen;
+
+    public void GameOver()
     {
-        Food.Spawn();
+        // pause game
+        Time.timeScale = 0;
+        // show Game Over screen
+        gameOverScreen.Setup();
     }
 }

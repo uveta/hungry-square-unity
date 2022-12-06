@@ -100,8 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  foodPrefab: {fileID: 146445307700842653, guid: c1aefb8deb0954742a66e69122421c67, type: 3}
-  enemyPrefab: {fileID: 5353819986153807193, guid: 9a841bbf836360f42a3b9bdc61787729, type: 3}
+  gameController: {fileID: 0}
 --- !u!50 &58231910
 Rigidbody2D:
   serializedVersion: 4

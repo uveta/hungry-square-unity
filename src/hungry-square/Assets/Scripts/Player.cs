@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 3.0f;
+    public GameController gameController;
     
     private float _horizontal;
 
@@ -35,14 +36,14 @@ public class Player : MonoBehaviour
         if (col.collider.CompareTag("Enemy"))
         {
             // collision with enemy
-            // game over
-            transform.position = new Vector2(-6, 0);
+            gameController.GameOver();
+            // transform.position = new Vector2(-6, 0);
         }
         if (col.collider.CompareTag("MainCamera"))
         {
             // collision with screen edge
-            // game over
-            transform.position = new Vector2(-6, 0);
+            gameController.GameOver();
+            // transform.position = new Vector2(-6, 0);
         }
         if (col.collider.CompareTag("Food"))
         {
