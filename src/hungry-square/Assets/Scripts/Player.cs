@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 3.0f;
-    public GameController gameController;
-    
+    private GameController GameController => FindObjectOfType<GameController>();
     private float _horizontal;
 
     // movement
@@ -16,7 +14,6 @@ public class Player : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         _horizontal = Input.GetAxis("Horizontal");
@@ -27,7 +24,7 @@ public class Player : MonoBehaviour
     {
         var position = _rigidbody2D.position;
         var move = new Vector2(_horizontal, _vertical);
-        position += move * (speed * Time.deltaTime);
+        position += move * (GameController.GameSpeed * Time.deltaTime);
         _rigidbody2D.MovePosition(position);
     }
 
@@ -36,13 +33,13 @@ public class Player : MonoBehaviour
         if (col.collider.CompareTag("Enemy"))
         {
             // collision with enemy
-            gameController.GameOver();
+            GameController.GameOver();
             // transform.position = new Vector2(-6, 0);
         }
         if (col.collider.CompareTag("MainCamera"))
         {
             // collision with screen edge
-            gameController.GameOver();
+            GameController.GameOver();
             // transform.position = new Vector2(-6, 0);
         }
         if (col.collider.CompareTag("Food"))
@@ -51,7 +48,7 @@ public class Player : MonoBehaviour
             // remove food
             Destroy(col.collider.gameObject);
             // TODO: increase score
-            // TODO: increase game speed
+            GameController.IncreaseSpeed();
             // spawn enemy
             Enemy.Spawn();
             // spawn food

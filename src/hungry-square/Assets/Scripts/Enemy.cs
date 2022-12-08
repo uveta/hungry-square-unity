@@ -4,7 +4,6 @@ public class Enemy : MonoBehaviour
 {
     private Rigidbody2D _rigidbody2D;
     private Collider2D _collider2D;
-    private Vector2 _initialForce = new(4f, 4f);
 
     private void Awake()
     {
@@ -14,20 +13,22 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        _rigidbody2D.AddForce(_initialForce, ForceMode2D.Impulse);
-    }
-
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        // TODO: check collision with player?
+        var gameSpeed = FindObjectOfType<GameController>().GameSpeed;
+        var velocity = Mathf.Sqrt(gameSpeed);
+        var bounds = _collider2D.bounds;
+        var maxVelocity = Mathf.Min(bounds.extents.x, bounds.extents.y) / Time.fixedDeltaTime;
+        velocity = Mathf.Min(velocity, maxVelocity);
+        var initialForce = new Vector2(velocity, velocity);
+        _rigidbody2D.AddForce(initialForce, ForceMode2D.Impulse);
     }
 
     private void OnCollisionExit2D(Collision2D col)
     {
-        var velocity = _rigidbody2D.velocity;
-        var bounds = _collider2D.bounds;
-        var moveX = Mathf.Abs(Time.fixedDeltaTime * velocity.x);
-        var moveY = Mathf.Abs(Time.fixedDeltaTime * velocity.y);
+        if (!col.collider.CompareTag("MainCamera")) return;
+        // var velocity = _rigidbody2D.velocity;
+        // var bounds = _collider2D.bounds;
+        // var moveX = Mathf.Abs(Time.fixedDeltaTime * velocity.x);
+        // var moveY = Mathf.Abs(Time.fixedDeltaTime * velocity.y);
         // if (moveX < bounds.extents.x && moveY < bounds.extents.y)
         // {
         //     var increase = velocity.magnitude * 0.1f;

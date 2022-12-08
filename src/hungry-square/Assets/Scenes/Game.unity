@@ -902,6 +902,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685a6624410b95f48af0e6e1ecb5d601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSpeed: 3
+  gameSpeedIncrement: 5
   gameOverScreen: {fileID: 73975344}
 --- !u!4 &1657796358
 Transform:
@@ -1041,9 +1043,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7329593853568029570, guid: 9405aa31e27cc3b48a9a52ce9c2ce08a, type: 3}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1657796357}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9405aa31e27cc3b48a9a52ce9c2ce08a, type: 3}
