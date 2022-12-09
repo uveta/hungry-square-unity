@@ -75,8 +75,8 @@ jobs:
           scope: subscription
           region: westeurope
           deploymentName: dep-resourceGroup-${{ github.run_id }}
-          template: ./infrastructure/azure/resourceGroup.bicep
-          parameters: './infrastructure/azure/parameters.json repositoryUrl=${{ env.REPOSITORY_URL }} deploymentId=${{ github.run_id }} webAppName=${{ env.WEB_APP_NAME }}'
+          template: ./infrastructure/resourceGroup.bicep
+          parameters: './infrastructure/parameters.json repositoryUrl=${{ env.REPOSITORY_URL }} deploymentId=${{ github.run_id }} webAppName=${{ env.WEB_APP_NAME }}'
           failOnStdErr: false
 
   deploy:
