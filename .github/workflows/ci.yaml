@@ -87,6 +87,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: Build
+          path: ./build
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -103,7 +104,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ env.SWA_DEPLOYMENT_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: 'upload'
-          app_location: './'
+          app_location: './build/WebGL/WebGL'
           output_location: ''
           skip_app_build: true
           skip_api_build: true
