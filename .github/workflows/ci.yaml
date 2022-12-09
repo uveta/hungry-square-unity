@@ -30,7 +30,7 @@ jobs:
           lfs: true
 
       - name: Cache Unity resources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.SOURCE_LOCATION }}/Library
           key: Library-${{ hashFiles('${{ env.SOURCE_LOCATION }}/Assets/**', '${{ env.SOURCE_LOCATION }}/Packages/**', '${{ env.SOURCE_LOCATION }}/ProjectSettings/**') }}
@@ -46,6 +46,7 @@ jobs:
         with:
           targetPlatform: WebGL
           projectPath: ${{ env.SOURCE_LOCATION }}
+          allowDirtyBuild: true
 
       - name: Publish build artifact
         uses: actions/upload-artifact@v3
@@ -74,8 +75,8 @@ jobs:
           scope: subscription
           region: westeurope
           deploymentName: dep-resourceGroup-${{ github.run_id }}
-          template: ./infrastructure/azure/resourceGroup.bicep
-          parameters: './infrastructure/azure/parameters.json repositoryUrl=${{ env.REPOSITORY_URL }} deploymentId=${{ github.run_id }} webAppName=${{ env.WEB_APP_NAME }}'
+          template: ./infra/resourceGroup.bicep
+          parameters: './infra/parameters.json repositoryUrl=${{ env.REPOSITORY_URL }} deploymentId=${{ github.run_id }} webAppName=${{ env.WEB_APP_NAME }}'
           failOnStdErr: false
 
   deploy:
@@ -85,7 +86,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: pwa
+          name: Build
+          path: ./build
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -102,7 +104,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ env.SWA_DEPLOYMENT_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: 'upload'
-          app_location: './'
+          app_location: './build/WebGL/WebGL'
           output_location: ''
           skip_app_build: true
           skip_api_build: true
