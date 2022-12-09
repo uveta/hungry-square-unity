@@ -1,0 +1,2 @@
+@REM Deploy template
+az deployment sub create --name demo-hungry-square --subscription 1edcae36-b0ca-4eb6-bf76-e2ae5aea6a35 --location westeurope --template-file resourceGroup.bicep --parameters parameters.json repositoryUrl=https://github.com/uveta/hungry-square-unity

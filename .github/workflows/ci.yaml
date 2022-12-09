@@ -1,0 +1,108 @@
+name: Build and deploy Hungry Square game to Azure Static Web Apps
+
+env:
+  SOURCE_LOCATION: './src/hungry-square' # location of your client code
+  RESOURCE_GROUP_NAME: 'rg-hungrysquaredemo' # resource group to deploy infrastructure
+  WEB_APP_NAME: 'stapp-hungrysquaredemo' # name of static web app resource to deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+permissions:
+  issues: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Cache Unity resources
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.SOURCE_LOCATION }}/Library
+          key: Library-${{ hashFiles('${{ env.SOURCE_LOCATION }}/Assets/**', '${{ env.SOURCE_LOCATION }}/Packages/**', '${{ env.SOURCE_LOCATION }}/ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: WebGL
+          projectPath: ${{ env.SOURCE_LOCATION }}
+
+      - name: Publish build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: build
+          if-no-files-found: error
+
+  infrastructure:
+    runs-on: ubuntu-latest
+    name: Deploy Infrastructure
+    needs: build
+    env:
+      REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Infrastructure
+        uses: azure/arm-deploy@v1
+        id: deploy
+        with:
+          scope: subscription
+          region: westeurope
+          deploymentName: dep-resourceGroup-${{ github.run_id }}
+          template: ./infrastructure/azure/resourceGroup.bicep
+          parameters: './infrastructure/azure/parameters.json repositoryUrl=${{ env.REPOSITORY_URL }} deploymentId=${{ github.run_id }} webAppName=${{ env.WEB_APP_NAME }}'
+          failOnStdErr: false
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Application
+    needs: infrastructure
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: pwa
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Get SWA deployment token
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            SWA_DEPLOYMENT_TOKEN=$(az staticwebapp secrets list -n ${{ env.WEB_APP_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} -o tsv --query properties.apiKey)
+            echo "::add-mask::$SWA_DEPLOYMENT_TOKEN"
+            echo SWA_DEPLOYMENT_TOKEN=$SWA_DEPLOYMENT_TOKEN >> $GITHUB_ENV
+      - name: Deploy Application
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.SWA_DEPLOYMENT_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: 'upload'
+          app_location: './'
+          output_location: ''
+          skip_app_build: true
+          skip_api_build: true
