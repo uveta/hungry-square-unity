@@ -46,6 +46,7 @@ jobs:
         with:
           targetPlatform: WebGL
           projectPath: ${{ env.SOURCE_LOCATION }}
+          # allowDirtyBuild: true
 
       - name: Publish build artifact
         uses: actions/upload-artifact@v3
