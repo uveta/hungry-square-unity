@@ -30,7 +30,7 @@ jobs:
           lfs: true
 
       - name: Cache Unity resources
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.SOURCE_LOCATION }}/Library
           key: Library-${{ hashFiles('${{ env.SOURCE_LOCATION }}/Assets/**', '${{ env.SOURCE_LOCATION }}/Packages/**', '${{ env.SOURCE_LOCATION }}/ProjectSettings/**') }}
@@ -86,7 +86,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: pwa
+          name: Build
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
