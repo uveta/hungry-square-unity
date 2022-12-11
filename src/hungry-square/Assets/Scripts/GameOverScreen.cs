@@ -1,10 +1,14 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverScreen : MonoBehaviour
 {
-    public void Show()
+    public TMP_Text text;
+
+    public void Show(int score)
     {
+        text.SetText($"GAME OVER, SCORE {score}");
         gameObject.SetActive(true);
     }
 
@@ -12,7 +16,6 @@ public class GameOverScreen : MonoBehaviour
     {
         // resume game
         Time.timeScale = 1;
-        // reload scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

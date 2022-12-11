@@ -48,9 +48,10 @@ public class Player : MonoBehaviour
             // remove food
             Destroy(col.collider.gameObject);
             // TODO: increase score
+            GameController.IncreaseScore();
             GameController.IncreaseSpeed();
             // spawn enemy
-            Enemy.Spawn();
+            Enemy.Spawn(transform.position);
             // spawn food
             Food.Spawn();
         }
