@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
         // pause game
         Time.timeScale = 0;
         // show Game Over screen
-        gameOverScreen.Setup();
+        gameOverScreen.Show();
     }
 
     public void IncreaseSpeed()
