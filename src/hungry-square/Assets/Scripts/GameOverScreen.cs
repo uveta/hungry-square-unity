@@ -8,7 +8,7 @@ public class GameOverScreen : MonoBehaviour
 
     public void Show(int score)
     {
-        text.SetText($"GAME OVER, SCORE {score}");
+        text.SetText($"{score} POINTS");
         gameObject.SetActive(true);
     }
 
