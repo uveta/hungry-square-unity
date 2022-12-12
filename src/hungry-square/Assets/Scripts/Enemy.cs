@@ -18,7 +18,9 @@ public class Enemy : MonoBehaviour
         var bounds = _collider2D.bounds;
         var maxVelocity = Mathf.Min(bounds.extents.x, bounds.extents.y) / Time.fixedDeltaTime;
         velocity = Mathf.Min(velocity, maxVelocity);
-        var initialForce = new Vector2(velocity, velocity);
+        var xVelocity = transform.position.x < 0 ? -velocity : velocity;
+        var yVelocity = transform.position.y < 0 ? -velocity : velocity;
+        var initialForce = new Vector2(xVelocity, yVelocity);
         _rigidbody2D.AddForce(initialForce, ForceMode2D.Impulse);
     }
 

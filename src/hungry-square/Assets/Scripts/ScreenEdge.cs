@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public class ScreenEdgeColliders : MonoBehaviour
+public class ScreenEdge : MonoBehaviour
 {
+    public float borderWidth = 0.1f;
+    private LineRenderer _border;
     private Camera _cam;
-    private EdgeCollider2D _edge;
+    private EdgeCollider2D _edgeCollider;
     private Vector2[] _edgePoints;
 
     private void Awake()
@@ -14,20 +16,30 @@ public class ScreenEdgeColliders : MonoBehaviour
         if (!_cam.orthographic) Debug.LogError("Camera.main is not Orthographic, failed to create edge colliders");
 
         // add or use existing EdgeCollider2D
-        _edge = GetComponent<EdgeCollider2D>() == null
+        _edgeCollider = GetComponent<EdgeCollider2D>() == null
             ? gameObject.AddComponent<EdgeCollider2D>()
             : GetComponent<EdgeCollider2D>();
 
-        _edge.sharedMaterial = Resources.Load<PhysicsMaterial2D>("Material");
-        // _edge.name = "EdgeCollider";
+        _border = GetComponent<LineRenderer>() == null
+            ? gameObject.AddComponent<LineRenderer>()
+            : GetComponent<LineRenderer>();
+
+        _edgeCollider.sharedMaterial = Resources.Load<PhysicsMaterial2D>("Material");
         _edgePoints = new Vector2[5];
 
-        AddCollider();
+        _border.loop = true;
+        _border.positionCount = 0;
+        _border.widthMultiplier = borderWidth;
+        _border.material = new Material(Shader.Find("Unlit/Texture"));
+        _border.startColor = Color.white;
+        _border.endColor = Color.white;
+
+        AddColliderAndBorder();
     }
 
     //Use this if you're okay with using the global fields and code in Awake() (more efficient)
     //You can just ignore/delete StandaloneAddCollider() if thats the case
-    private void AddCollider()
+    private void AddColliderAndBorder()
     {
         //Vector2's for the corners of the screen
         Vector2 bottomLeft = _cam.ScreenToWorldPoint(new Vector3(0, 0, _cam.nearClipPlane));
@@ -41,7 +53,12 @@ public class ScreenEdgeColliders : MonoBehaviour
         _edgePoints[2] = topRight;
         _edgePoints[3] = bottomRight;
         _edgePoints[4] = bottomLeft;
-
-        _edge.points = _edgePoints;
+        _edgeCollider.points = _edgePoints;
+        
+        _border.positionCount = 4;
+        _border.SetPosition(0, bottomLeft);
+        _border.SetPosition(1, topLeft);
+        _border.SetPosition(2, topRight);
+        _border.SetPosition(3, bottomRight);
     }
 }
