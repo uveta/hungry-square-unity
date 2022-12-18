@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class ScreenEdge : MonoBehaviour
 {
-    public float borderWidth = 0.1f;
-    private LineRenderer _border;
+    // public float borderWidth = 0.1f;
+    // private LineRenderer _border;
     private Camera _cam;
     private EdgeCollider2D _edgeCollider;
     private Vector2[] _edgePoints;
@@ -20,19 +20,19 @@ public class ScreenEdge : MonoBehaviour
             ? gameObject.AddComponent<EdgeCollider2D>()
             : GetComponent<EdgeCollider2D>();
 
-        _border = GetComponent<LineRenderer>() == null
-            ? gameObject.AddComponent<LineRenderer>()
-            : GetComponent<LineRenderer>();
+        // _border = GetComponent<LineRenderer>() == null
+        //     ? gameObject.AddComponent<LineRenderer>()
+        //     : GetComponent<LineRenderer>();
 
         _edgeCollider.sharedMaterial = Resources.Load<PhysicsMaterial2D>("Material");
         _edgePoints = new Vector2[5];
 
-        _border.loop = true;
-        _border.positionCount = 0;
-        _border.widthMultiplier = borderWidth;
-        _border.material = new Material(Shader.Find("Unlit/Texture"));
-        _border.startColor = Color.white;
-        _border.endColor = Color.white;
+        // _border.loop = true;
+        // _border.positionCount = 0;
+        // _border.widthMultiplier = borderWidth;
+        // _border.material = new Material(Shader.Find("Unlit/Texture"));
+        // _border.startColor = Color.white;
+        // _border.endColor = Color.white;
 
         AddColliderAndBorder();
     }
@@ -55,10 +55,10 @@ public class ScreenEdge : MonoBehaviour
         _edgePoints[4] = bottomLeft;
         _edgeCollider.points = _edgePoints;
         
-        _border.positionCount = 4;
-        _border.SetPosition(0, bottomLeft);
-        _border.SetPosition(1, topLeft);
-        _border.SetPosition(2, topRight);
-        _border.SetPosition(3, bottomRight);
+        // _border.positionCount = 4;
+        // _border.SetPosition(0, bottomLeft);
+        // _border.SetPosition(1, topLeft);
+        // _border.SetPosition(2, topRight);
+        // _border.SetPosition(3, bottomRight);
     }
 }
