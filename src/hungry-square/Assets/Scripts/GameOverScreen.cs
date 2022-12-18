@@ -12,7 +12,7 @@ public class GameOverScreen : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void RestartButton()
+    public void RestartGame()
     {
         // resume game
         Time.timeScale = 1;
